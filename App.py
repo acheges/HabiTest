@@ -139,6 +139,11 @@ def last_status_fulljoin():
     status_id = query_parameters.get("status_id")
     property_id = query_parameters.get("property_id")
     city = query_parameters.get("city")
+    year = query_parameters.get("year")
+    ymin = query_parameters.get("ymin")
+    ymax = query_parameters.get("ymax")
+    pmin = query_parameters.get("pmin")
+    pmax = query_parameters.get("pmax")
     # ------------------------------------------------
     # We add optional filters
     # -------------------------------------------------
@@ -151,10 +156,22 @@ def last_status_fulljoin():
     if property_id:
         filters.append(f"property_id = {property_id}")
     if city:
-        filters.append(f"city = {city}")
+        filters.append(f"property.city = '{city}'")
+    if year:
+        filters.append(f"year = {year}")
+    if ymin:
+        filters.append(f"year >= {ymin}")
+    if ymax:
+        filters.append(f"year <= {ymax}")
+    if pmin:
+        filters.append(f"price >= {pmin}")
+    if pmax:
+        filters.append(f"price <= {pmax}")
+
     if filters:
         add_filters = f""" WHERE {" AND ".join(filters)}"""
-        # print(add_filters)
+        print(add_filters)
+
         cur.execute(query + add_filters)
     else:
         cur.execute(query)
